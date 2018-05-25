@@ -1,4 +1,4 @@
-NAME = aciety/php
+NAME = ernestas/php
 VERSION = debug
 
 .PHONY: all
@@ -6,6 +6,5 @@ VERSION = debug
 all: build
 
 build:
-	docker pull php:7.0-fpm
-	docker build -t $(NAME):$(VERSION) --rm .
+	docker build --pull -t $(NAME):$(VERSION) --rm .
 
