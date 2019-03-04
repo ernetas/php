@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.2-fpm
 ENV APT_LISTCHANGES_FRONTEND mail
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y -o DPkg::options::='--force-confdef' -o Dpkg::Options::='--force-confold' \
@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y -o DPkg::options::='--force-confdef' -o
 	libgraphicsmagick1-dev \
 	libmagickwand-dev \
 	libcurl3 \
+        wget \
 	curl \
 	libcurl4-gnutls-dev \
 	libicu-dev \
@@ -30,4 +31,5 @@ RUN apt-get update && apt-get install -y -o DPkg::options::='--force-confdef' -o
     && curl --output composer -Ss https://getcomposer.org/download/1.2.0/composer.phar \
     && mv composer /usr/bin/composer \
     && chmod 755 /usr/bin/composer \
-    && chown root:root /usr/bin/composer
+    && chown root:root /usr/bin/composer \
+    && curl --output /etc/ssl/certs/rds.pem https://s3.amazonaws.com/rds-downloads/rds-ca-2015-eu-west-1.pem
