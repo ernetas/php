@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y -o DPkg::options::='--force-confdef' -o
 	imagemagick \
 	libgraphicsmagick1-dev \
 	libmagickwand-dev \
-	libcurl3 \
+	libcurl4 \
         wget \
 	curl \
 	libcurl4-gnutls-dev \
