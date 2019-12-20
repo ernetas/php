@@ -1,30 +1,35 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 ENV APT_LISTCHANGES_FRONTEND mail
 ENV DEBIAN_FRONTEND noninteractive
+ENV PHP_OPENSSL=yes
 RUN apt-get update && apt-get install -y -o DPkg::options::='--force-confdef' -o Dpkg::Options::='--force-confold' \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng16-16 libpng-dev libpng-tools \
-	imagemagick \
-	libgraphicsmagick1-dev \
-	libmagickwand-dev \
-	libcurl4 \
-        wget \
 	curl \
-	libcurl4-gnutls-dev \
-	libicu-dev \
-	libc-client2007e-dev \
+	git \
+	imagemagick \
+        libc-client-dev \
 	libc-client2007e \
+	libc-client2007e-dev \
+	libcurl4 \
+	libgnutls28-dev \
+	libgraphicsmagick1-dev \
+	libicu-dev \
 	libkrb5-dev \
+	libmagickwand-dev \
 	libmariadbclient-dev-compat \
 	libzip-dev \
-	git \
+        libcurl4-openssl-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        libpng-tools \
+        libpng16-16 \
+        wget \
     && apt-get clean \
     && apt-get autoremove -y \
     && docker-php-ext-install -j$(nproc) pdo_mysql mysqli zip iconv intl curl \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install -j$(nproc) gd imap \
     && rm -rf /var/lib/apt/lists/* \
