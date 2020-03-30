@@ -33,8 +33,14 @@ RUN apt-get update && apt-get install -y -o DPkg::options::='--force-confdef' -o
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install -j$(nproc) gd imap \
     && rm -rf /var/lib/apt/lists/* \
-    && curl --output composer -Ss https://getcomposer.org/download/1.2.0/composer.phar \
+    && curl --output composer -Ss https://getcomposer.org/composer-stable.phar \
     && mv composer /usr/bin/composer \
     && chmod 755 /usr/bin/composer \
     && chown root:root /usr/bin/composer \
-    && curl --output /etc/ssl/certs/rds.pem https://s3.amazonaws.com/rds-downloads/rds-ca-2015-eu-west-1.pem
+    && /usr/bin/composer --version \
+    && curl --output /etc/ssl/certs/rds.pem https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem \
+    && curl --output wp -Ss https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && mv wp /usr/bin/wp \
+    && chmod 755 /usr/bin/wp \
+    && chown root:root /usr/bin/wp \
+    && /usr/bin/wp --info

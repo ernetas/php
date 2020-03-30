@@ -1,10 +1,10 @@
 NAME = ernestas/php
-VERSION = debug
+VERSION = 7.4
 
-.PHONY: all
-
-all: build
+.PHONY: build push
 
 build:
 	docker build --pull -t $(NAME):$(VERSION) --rm .
 
+push:
+	docker push $(NAME):$(VERSION)
