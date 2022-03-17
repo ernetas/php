@@ -3,42 +3,51 @@ name: ci
 on:
   workflow_dispatch:
   schedule:
-    - cron:  '30 5,17 * * *'
+    - cron:  '0 0 * * *'
   push:
     branches:
       - 'main'
 
 jobs:
   docker:
+    permissions:
+      contents: read
+      packages: write
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Set up QEMU
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      -
-        name: Login to DockerHub
+
+      - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        uses: actions/checkout@v2
-      -
-        name: Build and push image
-        run: |
-          DOCKER_BUILDKIT=1 docker build . --tag ernestas/php:latest --label "runnumber=${GITHUB_RUN_ID}"
-          IMAGE_ID=ernestas/php
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_ID:latest $IMAGE_ID:$VERSION
-          docker tag $IMAGE_ID:latest $IMAGE_ID:${{ github.sha }}
-          docker push $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:${{ github.sha }}
-          docker push $IMAGE_ID:latest
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v2
+
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          build-args: UTIL_LINUX_VER=${{ steps.get_util_linux.outputs.version }}
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/php:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/php:latest
+            ghcr.io/${{ github.repository_owner }}/php:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/php:latest
+          push: true
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
