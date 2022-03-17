@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 php:8.1-fpm
+FROM php:8.1-fpm
 ENV APT_LISTCHANGES_FRONTEND mail
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_OPENSSL=yes
