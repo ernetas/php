@@ -47,8 +47,10 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/php:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/php:latest
           push: true
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/php:cache-latest
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/php:cache-latest,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+#          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/php:cache-latest
+#          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/php:cache-latest,mode=max
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
