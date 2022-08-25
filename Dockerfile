@@ -4,6 +4,7 @@ ENV APT_LISTCHANGES_FRONTEND mail
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_OPENSSL=yes
 RUN <<EOF
+#!/bin/bash
 apt-get update
 apt-get dist-upgrade -y
 apt-get install -y -o DPkg::options::='--force-confdef' -o Dpkg::Options::='--force-confold' \
