@@ -28,7 +28,7 @@ apt-get install -y -o DPkg::options::='--force-confdef' -o Dpkg::Options::='--fo
   libpng-dev \
   libpng-tools \
   libpng16-16 \
-  wget \
+  wget
 apt-get clean
 apt-get autoremove -y
 docker-php-ext-install -j$(nproc) pdo_mysql mysqli zip iconv intl curl
