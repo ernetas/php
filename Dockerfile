@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4.1
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 ENV APT_LISTCHANGES_FRONTEND mail
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_OPENSSL=yes
