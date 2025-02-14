@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.5.2
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 ENV PHP_OPENSSL=yes
 RUN <<EOF
 #!/bin/sh
